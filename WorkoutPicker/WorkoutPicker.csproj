@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{173CFE77-9F70-4DD2-AD40-290E14785BEA}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WorkoutPicker</RootNamespace>
+    <AssemblyName>WorkoutPicker</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Builder\ColdExerciseBuilder.cs" />
+    <Compile Include="Builder\SnowExerciseBuilder.cs" />
+    <Compile Include="Builder\RainExerciseBuilder.cs" />
+    <Compile Include="Builder\NormalExerciseBuilder.cs" />
+    <Compile Include="Entities\CrossfitInsideExercise.cs" />
+    <Compile Include="Entities\ExerciseToSave.cs" />
+    <Compile Include="Entities\ICrossfitInside.cs" />
+    <Compile Include="Entities\IStrongman.cs" />
+    <Compile Include="Entities\StrongmanExercise.cs" />
+    <Compile Include="Factory\AbstractFactory.cs" />
+    <Compile Include="Factory\RainFactory.cs" />
+    <Compile Include="Factory\SnowFactory.cs" />
+    <Compile Include="Factory\ColdFactory.cs" />
+    <Compile Include="Factory\NormalFactory.cs" />
+    <Compile Include="Strategy\CompletionStrategy.cs" />
+    <Compile Include="Strategy\FastestForDistanceStrategy.cs" />
+    <Compile Include="Strategy\FastestForRepsStrategy.cs" />
+    <Compile Include="Strategy\ITemplateStrategy.cs" />
+    <Compile Include="Strategy\LongestForWeightStrategy.cs" />
+    <Compile Include="Strategy\MaxRepsForWeightStrategy.cs" />
+    <Compile Include="Strategy\MaxWeightStrategy.cs" />
+    <Compile Include="Strategy\MostRepsForTimeStrategy.cs" />
+    <Compile Include="Strategy\NoneStrategy.cs" />
+    <Compile Include="Strategy\TemplateContext.cs" />
+    <Compile Include="Template\RepTemplate.cs" />
+    <Compile Include="Template\RepTimeTemplate.cs" />
+    <Compile Include="Template\SetTemplate.cs" />
+    <Compile Include="Template\DistanceTemplate.cs" />
+    <Compile Include="Template\LapDistanceTemplate.cs" />
+    <Compile Include="Template\LapTimeTemplate.cs" />
+    <Compile Include="Template\ITemplate.cs" />
+    <Compile Include="Template\LapTemplate.cs" />
+    <Compile Include="Template\LapTimeDistanceTemplate.cs" />
+    <Compile Include="Template\SetRepTemplate.cs" />
+    <Compile Include="Template\TimeDistanceTemplate.cs" />
+    <Compile Include="Template\TimeTemplate.cs" />
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Builder\ExerciseAbstractBuilder.cs" />
+    <Compile Include="Builder\ExerciseConstructor.cs" />
+    <Compile Include="Builder\HotExerciseBuilder.cs" />
+    <Compile Include="Builder\IExerciseBuilder.cs" />
+    <Compile Include="Entities\ExerciseList.cs" />
+    <Compile Include="Entities\IExercise.cs" />
+    <Compile Include="Entities\IAerobic.cs" />
+    <Compile Include="Entities\IPowerlifting.cs" />
+    <Compile Include="Entities\AerobicExercise.cs" />
+    <Compile Include="Entities\PowerliftingExercise.cs" />
+    <Compile Include="Factory\HotFactory.cs" />
+    <Compile Include="Factory\IFactory.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

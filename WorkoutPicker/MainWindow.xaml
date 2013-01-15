@@ -1,0 +1,27 @@
+﻿<Window x:Class="WorkoutPicker.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="450" Width="825">
+    <Grid>
+        <DockPanel LastChildFill="True">
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                <Label Name="WeatherTypeLabel" Margin="8">Weather Type:</Label>
+                <ListBox Name="WeatherType" Margin="8" Height="22" Width="214" SelectionChanged="WeatherType_SelectionChanged_1" >
+                    <ListBoxItem>Normal</ListBoxItem>
+                    <ListBoxItem>Cold</ListBoxItem>
+                    <ListBoxItem>Rain</ListBoxItem>
+                    <ListBoxItem>Snow</ListBoxItem>
+                    <ListBoxItem>Hot</ListBoxItem>
+                </ListBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="15" HorizontalAlignment="Center" DockPanel.Dock="Bottom">
+                <Button Name="Save" Content="Save" Padding="15" Click="Save_Click_1"></Button>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Margin="15" DockPanel.Dock="Bottom">
+                <TextBlock HorizontalAlignment="Center" FontFamily="Verdana" FontSize="15" Padding="15" Name="Exercise">Exercises Here:</TextBlock>
+                <StackPanel Name="ExerciseList" Orientation="Vertical">
+                </StackPanel>
+            </StackPanel>
+        </DockPanel>
+    </Grid>
+</Window>
