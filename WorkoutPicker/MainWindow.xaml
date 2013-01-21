@@ -1,7 +1,7 @@
 ﻿<Window x:Class="WorkoutPicker.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="450" Width="825">
+        Title="MainWindow" Height="550" Width="825">
     <Grid>
         <DockPanel LastChildFill="True">
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
@@ -13,11 +13,41 @@
                     <ListBoxItem>Snow</ListBoxItem>
                     <ListBoxItem>Hot</ListBoxItem>
                 </ListBox>
+                <Button Name="Settings" Content="Settings" Click="Settings_Click_1" Margin="35 0 0 0"></Button>
+                <Button Name="TrendsToggle" Content="Historical Trend" Click="Trends_Click_1" Margin="35 0 0 0"></Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="15" HorizontalAlignment="Center" DockPanel.Dock="Bottom">
                 <Button Name="Save" Content="Save" Padding="15" Click="Save_Click_1"></Button>
             </StackPanel>
-            <StackPanel Orientation="Vertical" Margin="15" DockPanel.Dock="Bottom">
+            <StackPanel Name="TrendDataPanel" Orientation="Vertical" Margin="15" Visibility="Collapsed" Width="750">
+                <TextBlock HorizontalAlignment="Center" FontFamily="Verdana" FontSize="15" Padding="15" Name="HistoricalResultName">Trend Data</TextBlock>
+                <FlowDocumentScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" BorderThickness="1" BorderBrush="Black">
+                    <FlowDocument>
+                        <Table Name="TrendDataTable">
+                            <TableRowGroup>
+                                <TableRow Background="BlanchedAlmond">
+                                    <TableCell BorderBrush="Black" BorderThickness="1 1 1 0" Padding="5">
+                                        <Paragraph>Exercise</Paragraph>
+                                    </TableCell>
+                                    <TableCell BorderBrush="Black" BorderThickness="1 1 1 0" Padding="5">
+                                        <Paragraph>Goal</Paragraph>
+                                    </TableCell>
+                                    <TableCell BorderBrush="Black" BorderThickness="1 1 1 0" Padding="5">
+                                        <Paragraph># of Completions</Paragraph>
+                                    </TableCell>
+                                    <TableCell BorderBrush="Black" BorderThickness="1 1 1 0" Padding="5">
+                                        <Paragraph>Best Performance</Paragraph>
+                                    </TableCell>
+                                    <TableCell BorderBrush="Black" BorderThickness="1 1 1 0" Padding="5">
+                                        <Paragraph>Date</Paragraph>
+                                    </TableCell>
+                                </TableRow>
+                            </TableRowGroup>
+                        </Table>
+                    </FlowDocument>
+                </FlowDocumentScrollViewer>
+            </StackPanel>
+            <StackPanel Name="ExerciseListPanel" Orientation="Vertical" Margin="15" Visibility="Visible" Width="750">
                 <TextBlock HorizontalAlignment="Center" FontFamily="Verdana" FontSize="15" Padding="15" Name="Exercise">Exercises Here:</TextBlock>
                 <StackPanel Name="ExerciseList" Orientation="Vertical">
                 </StackPanel>
