@@ -60,6 +60,7 @@
     <Compile Include="Builder\SnowExerciseBuilder.cs" />
     <Compile Include="Builder\RainExerciseBuilder.cs" />
     <Compile Include="Builder\NormalExerciseBuilder.cs" />
+    <Compile Include="Entities\BestExercise.cs" />
     <Compile Include="Entities\CrossfitInsideExercise.cs" />
     <Compile Include="Entities\ExerciseToSave.cs" />
     <Compile Include="Entities\ICrossfitInside.cs" />

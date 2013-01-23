@@ -6,24 +6,13 @@ using System.Threading.Tasks;
 
 namespace WorkoutPicker.Entities
 {
-    class ExerciseToSave
+    class BestExercise
     {
         public int Id { get; set; }
-
+        public DateTime Date { get; set; }
+        public dynamic BestScore { get; set; }
+        public int Count { get; set; }
         public string Name { get; set; }
-
-        public TimeSpan Time { get; set; }
-
-        public float Distance { get; set; }
-
-        public int Reps { get; set; }
-
-        public int Sets { get; set; }
-
-        public float Weight { get; set; }
-
         public ExerciseType ExerciseType { get; set; }
-
-        public DateTime DateToSave { get; set; }
     }
 }

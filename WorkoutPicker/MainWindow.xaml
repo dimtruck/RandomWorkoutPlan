@@ -16,13 +16,13 @@
                 <Button Name="Settings" Content="Settings" Click="Settings_Click_1" Margin="35 0 0 0"></Button>
                 <Button Name="TrendsToggle" Content="Historical Trend" Click="Trends_Click_1" Margin="35 0 0 0"></Button>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="15" HorizontalAlignment="Center" DockPanel.Dock="Bottom">
+            <StackPanel Name="SavePanel" Orientation="Horizontal" Margin="15" HorizontalAlignment="Center" DockPanel.Dock="Bottom">
                 <Button Name="Save" Content="Save" Padding="15" Click="Save_Click_1"></Button>
             </StackPanel>
             <StackPanel Name="TrendDataPanel" Orientation="Vertical" Margin="15" Visibility="Collapsed" Width="750">
                 <TextBlock HorizontalAlignment="Center" FontFamily="Verdana" FontSize="15" Padding="15" Name="HistoricalResultName">Trend Data</TextBlock>
-                <FlowDocumentScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" BorderThickness="1" BorderBrush="Black">
-                    <FlowDocument>
+                <FlowDocumentScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" BorderThickness="1" BorderBrush="Black">
+                    <FlowDocument ScrollViewer.IsDeferredScrollingEnabled="True">
                         <Table Name="TrendDataTable">
                             <TableRowGroup>
                                 <TableRow Background="BlanchedAlmond">

@@ -16,7 +16,7 @@ namespace WorkoutPicker.Factory
 
         public override IList<IExercise> CreateList()
         {
-            return ExerciseConstructor.Construct(new NormalExerciseBuilder());
+            return ExerciseList.GetExerciseList()[typeof(NormalExerciseBuilder).Name];
         }
 
 
