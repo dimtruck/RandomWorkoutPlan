@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WorkoutPicker.Entities
 {
-    class ExerciseToSave
+    public class ExerciseToSave
     {
         public int Id { get; set; }
 

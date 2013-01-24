@@ -10,7 +10,7 @@ using System.Windows.Media;
 using WorkoutPicker.Entities;
 using WorkoutPicker.Factory;
 using WorkoutPicker.Strategy;
-using System.Xml.Linq;
+using System.Linq;
 
 namespace WorkoutPicker
 {
@@ -136,90 +136,31 @@ namespace WorkoutPicker
                 TrendDataPanel.Visibility = System.Windows.Visibility.Visible;
                 WeatherType.IsEnabled = false;
 
-                IList<ExerciseToSave> exerciseList = new List<ExerciseToSave>();
-                //show all workouts here
-                using (TextReader writer = new StreamReader("exercises.json"))
-                using (JsonTextReader jsonWriter = new JsonTextReader(writer))
-                {
-                    JsonSerializer serializer = new JsonSerializer();
-                    serializer.Converters.Add(new JavaScriptDateTimeConverter());
-                    serializer.NullValueHandling = NullValueHandling.Ignore;
-                    exerciseList = serializer.Deserialize<IList<ExerciseToSave>>(jsonWriter);
-                }
+                IList<ExerciseToSave> exerciseList = RetrieveSavedExercises();
+
+                List<IExercise> tempList = FlattenExerciseListDictionary();
 
                 //here combine by id, get type for each id and based on type, look at highest value
                 IDictionary<int, BestExercise> bestExerciseDictionary = new Dictionary<int, BestExercise>();
                 foreach (ExerciseToSave item in exerciseList)
                 {
                     BestExercise bestExercise = new BestExercise();
-                    switch (item.ExerciseType)
-                    {
-                        case ExerciseType.NONE:
-                            break;
-                        case ExerciseType.MAX_REPS_PER_WEIGHT:
-                            bestExercise = new BestExercise() { ExerciseType = item.ExerciseType, Name = item.Name, BestScore = new { Weight = item.Weight, Reps = item.Reps }, Date = item.DateToSave, Id = item.Id, Count = 1 };
-                            break;
-                        case ExerciseType.MAX_WEIGHT:
-                            bestExercise = new BestExercise() { ExerciseType = item.ExerciseType, Name = item.Name, BestScore = item.Weight, Date = item.DateToSave, Id = item.Id, Count = 1 };
-                            break;
-                        case ExerciseType.FASTEST_FOR_DISTANCE:
-                            bestExercise = new BestExercise() { ExerciseType = item.ExerciseType, Name = item.Name, BestScore = item.Time, Date = item.DateToSave, Id = item.Id, Count = 1 };
-                            break;
-                        case ExerciseType.COMPLETION:
-                            bestExercise = new BestExercise() { ExerciseType = item.ExerciseType, Name = item.Name, Date = item.DateToSave, Id = item.Id, Count = 1 };
-                            break;
-                        case ExerciseType.FASTEST_FOR_REPS:
-                            bestExercise = new BestExercise() { ExerciseType = item.ExerciseType, Name = item.Name, BestScore = item.Time, Date = item.DateToSave, Id = item.Id, Count = 1 };
-                            break;
-                        case ExerciseType.LONGEST_FOR_WEIGHT:
-                            bestExercise = new BestExercise() { ExerciseType = item.ExerciseType, Name = item.Name, BestScore = item.Distance, Date = item.DateToSave, Id = item.Id, Count = 1 };
-                            break;
-                        case ExerciseType.MOST_REPS_FOR_TIME:
-                            bestExercise = new BestExercise() { ExerciseType = item.ExerciseType, Name = item.Name, BestScore = item.Reps, Date = item.DateToSave, Id = item.Id, Count = 1 };
-                            break;
-                        default:
-                            break;
-                    }
+                    bestExercise = new BestExercise() { 
+                        Combination = tempList.First(t => t.Id == item.Id).Output(), 
+                        ExerciseType = item.ExerciseType,
+                        Name = item.Name,
+                        BestScore = templateDictionary[item.ExerciseType].CreateBestScore(item),
+                        Date = item.DateToSave,
+                        Id = item.Id,
+                        Count = 1
+                    };
 
                     if (!bestExerciseDictionary.ContainsKey(item.Id))
                         bestExerciseDictionary[item.Id] = bestExercise;
                     else
                     {
-                        BestExercise currentBestExercise = bestExerciseDictionary[item.Id]; 
-                        switch (item.ExerciseType)
-                        {
-                            case ExerciseType.NONE:
-                                break;
-                            case ExerciseType.MAX_REPS_PER_WEIGHT:
-                                if ((bestExercise.BestScore.Weight > currentBestExercise.BestScore.Weight) ||
-                                    (bestExercise.BestScore.Weight == currentBestExercise.BestScore.Weight && bestExercise.BestScore.Reps > currentBestExercise.BestScore.Reps))
-                                    bestExerciseDictionary[item.Id] = bestExercise;
-                                break;
-                            case ExerciseType.MAX_WEIGHT:
-                                if (bestExercise.BestScore > currentBestExercise.BestScore)
-                                    bestExerciseDictionary[item.Id] = bestExercise;
-                                break;
-                            case ExerciseType.FASTEST_FOR_DISTANCE:
-                                if (bestExercise.BestScore > currentBestExercise.BestScore)
-                                    bestExerciseDictionary[item.Id] = bestExercise;
-                                break;
-                            case ExerciseType.COMPLETION:
-                                break;
-                            case ExerciseType.FASTEST_FOR_REPS:
-                                if (bestExercise.BestScore > currentBestExercise.BestScore)
-                                    bestExerciseDictionary[item.Id] = bestExercise;
-                                break;
-                            case ExerciseType.LONGEST_FOR_WEIGHT:
-                                if (bestExercise.BestScore > currentBestExercise.BestScore)
-                                    bestExerciseDictionary[item.Id] = bestExercise;
-                                break;
-                            case ExerciseType.MOST_REPS_FOR_TIME:
-                                if (bestExercise.BestScore > currentBestExercise.BestScore)
-                                    bestExerciseDictionary[item.Id] = bestExercise;
-                                break;
-                            default:
-                                break;
-                        }
+                        BestExercise currentBestExercise = bestExerciseDictionary[item.Id];
+                        bestExerciseDictionary[item.Id] = templateDictionary[item.ExerciseType].CompareExercisesByTopScore(currentBestExercise, bestExercise);
                         bestExerciseDictionary[item.Id].Count++;
                     }
                 }
@@ -231,35 +172,9 @@ namespace WorkoutPicker
                     TableRow row = new TableRow();
                     BestExercise item = exerciseKeyValuePair.Value;
                     row.Cells.Add(new TableCell(new Paragraph(new Run(item.Name))) { BorderBrush = Brushes.Black, BorderThickness = new Thickness(1, 1, 1, 0), Padding = new Thickness(5), FontSize = 10 });
-                    row.Cells.Add(new TableCell(new Paragraph(new Run(item.ExerciseType.ToString().Replace('_',' ')))) { BorderBrush = Brushes.Black, BorderThickness = new Thickness(1, 1, 1, 0), Padding = new Thickness(5), FontSize = 10 });
+                    row.Cells.Add(new TableCell(new Paragraph(new Run(item.ExerciseType.ToString().Replace('_', ' ') + " " + item.Combination))) { BorderBrush = Brushes.Black, BorderThickness = new Thickness(1, 1, 1, 0), Padding = new Thickness(5), FontSize = 10 });
                     row.Cells.Add(new TableCell(new Paragraph(new Run(item.Count.ToString()))) { BorderBrush = Brushes.Black, BorderThickness = new Thickness(1, 1, 1, 0), Padding = new Thickness(5), FontSize = 10 });
-                    switch (item.ExerciseType)
-                    {
-                        case ExerciseType.NONE:
-                            break;
-                        case ExerciseType.MAX_REPS_PER_WEIGHT:
-                            row.Cells.Add(new TableCell(new Paragraph(new Run(item.BestScore.Weight + " for " + item.BestScore.Reps))) { BorderBrush = Brushes.Black, BorderThickness = new Thickness(1, 1, 1, 0), Padding = new Thickness(5), FontSize = 10 }); break;
-                        case ExerciseType.MAX_WEIGHT:
-                            row.Cells.Add(new TableCell(new Paragraph(new Run(item.BestScore.ToString()))) { BorderBrush = Brushes.Black, BorderThickness = new Thickness(1, 1, 1, 0), Padding = new Thickness(5), FontSize = 10 });
-                            break;
-                        case ExerciseType.FASTEST_FOR_DISTANCE:
-                            row.Cells.Add(new TableCell(new Paragraph(new Run(item.BestScore.ToString()))) { BorderBrush = Brushes.Black, BorderThickness = new Thickness(1, 1, 1, 0), Padding = new Thickness(5), FontSize = 10 });
-                            break;
-                        case ExerciseType.COMPLETION:
-                            row.Cells.Add(new TableCell(new Paragraph(new Run(""))) { BorderBrush = Brushes.Black, BorderThickness = new Thickness(1, 1, 1, 0), Padding = new Thickness(5), FontSize = 10 });
-                            break;
-                        case ExerciseType.FASTEST_FOR_REPS:
-                            row.Cells.Add(new TableCell(new Paragraph(new Run(item.BestScore.ToString()))) { BorderBrush = Brushes.Black, BorderThickness = new Thickness(1, 1, 1, 0), Padding = new Thickness(5), FontSize = 10 });
-                            break;
-                        case ExerciseType.LONGEST_FOR_WEIGHT:
-                            row.Cells.Add(new TableCell(new Paragraph(new Run(item.BestScore.ToString()))) { BorderBrush = Brushes.Black, BorderThickness = new Thickness(1, 1, 1, 0), Padding = new Thickness(5), FontSize = 10 });
-                            break;
-                        case ExerciseType.MOST_REPS_FOR_TIME:
-                            row.Cells.Add(new TableCell(new Paragraph(new Run(item.BestScore.ToString()))) { BorderBrush = Brushes.Black, BorderThickness = new Thickness(1, 1, 1, 0), Padding = new Thickness(5), FontSize = 10 });
-                            break;
-                        default:
-                            break;
-                    }
+                    row.Cells.Add(new TableCell(templateDictionary[item.ExerciseType].BuildParagraph(item)) { BorderBrush = Brushes.Black, BorderThickness = new Thickness(1, 1, 1, 0), Padding = new Thickness(5), FontSize = 10 });
                     row.Cells.Add(new TableCell(new Paragraph(new Run(item.Date.ToShortDateString()))) { BorderBrush = Brushes.Black, BorderThickness = new Thickness(1, 1, 1, 0), Padding = new Thickness(5), FontSize = 10 });
                     group.Rows.Add(row);
                 }
@@ -276,6 +191,31 @@ namespace WorkoutPicker
                 TrendDataTable.RowGroups.RemoveAt(1);
             }
 
+        }
+
+        private static List<IExercise> FlattenExerciseListDictionary()
+        {
+            List<IExercise> tempList = new List<IExercise>();
+            foreach (var item in Entities.ExerciseList.GetExerciseList())
+            {
+                tempList.AddRange(item.Value);
+            }
+            return tempList;
+        }
+
+        private static IList<ExerciseToSave> RetrieveSavedExercises()
+        {
+            IList<ExerciseToSave> exerciseList = new List<ExerciseToSave>();
+            //show all workouts here
+            using (TextReader writer = new StreamReader("exercises.json"))
+            using (JsonTextReader jsonWriter = new JsonTextReader(writer))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Converters.Add(new JavaScriptDateTimeConverter());
+                serializer.NullValueHandling = NullValueHandling.Ignore;
+                exerciseList = serializer.Deserialize<IList<ExerciseToSave>>(jsonWriter);
+            }
+            return exerciseList;
         }
     }
 

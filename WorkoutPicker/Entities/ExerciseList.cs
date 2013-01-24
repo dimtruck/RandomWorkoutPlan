@@ -73,5 +73,6 @@ namespace WorkoutPicker.Entities
             dictionary[ExerciseType.MOST_REPS_FOR_TIME] = "Reps";
             return dictionary;
         }
+
     }
 }

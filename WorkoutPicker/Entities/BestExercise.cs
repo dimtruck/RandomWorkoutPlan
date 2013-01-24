@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WorkoutPicker.Entities
 {
-    class BestExercise
+    public class BestExercise
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }
@@ -14,5 +14,6 @@ namespace WorkoutPicker.Entities
         public int Count { get; set; }
         public string Name { get; set; }
         public ExerciseType ExerciseType { get; set; }
+        public string Combination { get; set; }
     }
 }
