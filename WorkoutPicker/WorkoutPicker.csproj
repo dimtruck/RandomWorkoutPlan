@@ -60,12 +60,16 @@
     <Compile Include="Builder\SnowExerciseBuilder.cs" />
     <Compile Include="Builder\RainExerciseBuilder.cs" />
     <Compile Include="Builder\NormalExerciseBuilder.cs" />
+    <Compile Include="Command\GetSavedExerciseCommand.cs" />
+    <Compile Include="Command\ICommand.cs" />
+    <Compile Include="Command\SaveCommand.cs" />
     <Compile Include="Entities\BestExercise.cs" />
     <Compile Include="Entities\CrossfitInsideExercise.cs" />
     <Compile Include="Entities\ExerciseToSave.cs" />
     <Compile Include="Entities\ICrossfitInside.cs" />
     <Compile Include="Entities\IStrongman.cs" />
     <Compile Include="Entities\StrongmanExercise.cs" />
+    <Compile Include="Entities\WeatherSetting.cs" />
     <Compile Include="Factory\AbstractFactory.cs" />
     <Compile Include="Factory\RainFactory.cs" />
     <Compile Include="Factory\SnowFactory.cs" />
@@ -93,6 +97,8 @@
     <Compile Include="Template\SetRepTemplate.cs" />
     <Compile Include="Template\TimeDistanceTemplate.cs" />
     <Compile Include="Template\TimeTemplate.cs" />
+    <Compile Include="Utils\ExerciseComparer.cs" />
+    <Compile Include="Utils\GridViewSort.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

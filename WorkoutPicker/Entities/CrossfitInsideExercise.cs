@@ -19,41 +19,44 @@ namespace WorkoutPicker.Entities
 
         public string Name { get; set; }
 
-        public string Output()
+        public string Output
         {
-            StringBuilder builder = new StringBuilder();
-            //options
-            if (!String.IsNullOrEmpty(Name))
+            get
             {
-                if (Reps > 0)
+                StringBuilder builder = new StringBuilder();
+                //options
+                if (!String.IsNullOrEmpty(Name))
                 {
-                    if (Time.TotalMilliseconds > 0)
+                    if (Reps > 0)
                     {
-                        if (Sets > 0)
+                        if (Time.TotalMilliseconds > 0)
                         {
+                            if (Sets > 0)
+                            {
+                            }
+                            else
+                                builder.Append(new RepTimeTemplate().Create(Reps, Time));
                         }
                         else
-                            builder.Append(new RepTimeTemplate().Create(Reps, Time));
+                        {
+                            if (Sets > 0)
+                                builder.Append(new SetRepTemplate().Create(Reps, Time));
+                            else
+                                builder.Append(new RepTemplate().Create(Reps));
+                        }
                     }
                     else
                     {
-                        if (Sets > 0)
-                            builder.Append(new SetRepTemplate().Create(Reps, Time));
-                        else
-                            builder.Append(new RepTemplate().Create(Reps));
-                    }
-                }
-                else
-                {
-                    if (Time.TotalMilliseconds > 0)
-                    {
-                        builder.Append(new TimeTemplate().Create(Time));
-                    }
-                    
-                }
+                        if (Time.TotalMilliseconds > 0)
+                        {
+                            builder.Append(new TimeTemplate().Create(Time));
+                        }
 
+                    }
+
+                }
+                return builder.ToString();
             }
-            return builder.ToString();
         }
 
         public ExerciseType ExerciseType { get; set; }

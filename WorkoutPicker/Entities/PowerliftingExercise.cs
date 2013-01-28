@@ -25,47 +25,50 @@ namespace WorkoutPicker.Entities
 
         public ExerciseType ExerciseType { get; set; }
 
-        public string Output()
+        public string Output
         {
-            StringBuilder builder = new StringBuilder();
-            //options
-            if (!String.IsNullOrEmpty(Name))
+            get
             {
-                //weight/sets/reps/time/distance - NA
-                //weight/sets/reps/time - Name - lift weight for s sets of r reps in t time
-                //weight/sets/reps/distance - NA
-                //weight/sets/reps - Name - lift weight for s sets of r reps
-                //weight/sets/distance - NA (strongman with laps)
-                //weight/sets/time - NA (strongman with laps)
-                //weight/sets - NA
-                //weight/reps - 
-                //weight/
-                if (Sets > 0)
+                StringBuilder builder = new StringBuilder();
+                //options
+                if (!String.IsNullOrEmpty(Name))
                 {
-                    if (Reps > 0)
+                    //weight/sets/reps/time/distance - NA
+                    //weight/sets/reps/time - Name - lift weight for s sets of r reps in t time
+                    //weight/sets/reps/distance - NA
+                    //weight/sets/reps - Name - lift weight for s sets of r reps
+                    //weight/sets/distance - NA (strongman with laps)
+                    //weight/sets/time - NA (strongman with laps)
+                    //weight/sets - NA
+                    //weight/reps - 
+                    //weight/
+                    if (Sets > 0)
                     {
-                        if (Distance > 0)
+                        if (Reps > 0)
                         {
-                        }
-                        else if (Time.TotalMilliseconds > 0)
-                        {
-                        }
-                        else if (Weight > 0)
-                        {
+                            if (Distance > 0)
+                            {
+                            }
+                            else if (Time.TotalMilliseconds > 0)
+                            {
+                            }
+                            else if (Weight > 0)
+                            {
+                            }
+                            else
+                            {
+                                builder.Append(new SetRepTemplate().Create(Sets, Reps));
+                            }
                         }
                         else
                         {
-                            builder.Append(new SetRepTemplate().Create(Sets, Reps));
+                            builder.Append(new SetTemplate().Create(Sets));
                         }
                     }
-                    else
-                    {
-                        builder.Append(new SetTemplate().Create(Sets));
-                    }
-                }
 
+                }
+                return builder.ToString();
             }
-            return builder.ToString();
         }
     }
 }

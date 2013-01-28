@@ -10,7 +10,7 @@ namespace WorkoutPicker.Entities
     {
         int Id { get; set; }
         String Name { get; set; }
-        String Output();
+        String Output { get; }
         ExerciseType ExerciseType { get; set; }
     }
 }

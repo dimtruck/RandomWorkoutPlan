@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -72,6 +73,18 @@ namespace WorkoutPicker.Entities
             dictionary[ExerciseType.MAX_WEIGHT] = "Weight";
             dictionary[ExerciseType.MOST_REPS_FOR_TIME] = "Reps";
             return dictionary;
+        }
+
+        public static ObservableCollection<WeatherSetting> SetupWeatherSettingList()
+        {
+            return new ObservableCollection<WeatherSetting>()
+            {
+                new WeatherSetting { NumberOfExercises=5, WeatherType = "HOT", Weight=1},
+                new WeatherSetting(){ NumberOfExercises=5, WeatherType = "NORMAL", Weight=1},
+                new WeatherSetting(){ NumberOfExercises=5, WeatherType = "COLD", Weight=1},
+                new WeatherSetting(){ NumberOfExercises=5, WeatherType = "SNOW", Weight=1},
+                new WeatherSetting(){ NumberOfExercises=5, WeatherType = "RAIN", Weight=1}
+            };
         }
 
     }

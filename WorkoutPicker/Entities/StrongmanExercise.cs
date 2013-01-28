@@ -17,34 +17,37 @@ namespace WorkoutPicker.Entities
 
         public string Name { get; set; }
 
-        public string Output()
+        public string Output
         {
-            StringBuilder builder = new StringBuilder();
-            //options
-            if (!String.IsNullOrEmpty(Name))
+            get
             {
-                if (Laps != 0)
+                StringBuilder builder = new StringBuilder();
+                //options
+                if (!String.IsNullOrEmpty(Name))
                 {
-                    if (Time.TotalMilliseconds > 0)
+                    if (Laps != 0)
                     {
-                        builder.Append(new LapTimeTemplate().Create(Laps, Time));
+                        if (Time.TotalMilliseconds > 0)
+                        {
+                            builder.Append(new LapTimeTemplate().Create(Laps, Time));
+                        }
+                        else
+                        {
+                            builder.Append(new LapTemplate().Create(Laps));
+                        }
                     }
                     else
-                    {
-                        builder.Append(new LapTemplate().Create(Laps));
-                    }
+                        if (Time.TotalMilliseconds > 0)
+                        {
+                            builder.Append(new TimeTemplate().Create(Time));
+                        }
+
                 }
-                else
-                    if (Time.TotalMilliseconds > 0)
-                    {
-                        builder.Append(new TimeTemplate().Create(Time));
-                    }
 
+                //Name - Run ${distance}
+                //Name - Run ${distance} laps in ${time}
+                return builder.ToString();
             }
-
-            //Name - Run ${distance}
-            //Name - Run ${distance} laps in ${time}
-            return builder.ToString();
         }
 
         public ExerciseType ExerciseType { get; set; }

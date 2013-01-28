@@ -23,7 +23,7 @@ namespace WorkoutPicker.Factory
                 StackPanel newPanel = new StackPanel() { Name = pickedExercise.Name.Replace(' ', '_') };
                 newPanel.Orientation = Orientation.Horizontal;
                 TextBlock exerciseName = new TextBlock() { Text = pickedExercise.Name, Width = 100, Name = "Id_" + pickedExercise.Id.ToString() };
-                TextBlock exerciseOutput = new TextBlock() { Text = pickedExercise.Output(), Width = 200 };
+                TextBlock exerciseOutput = new TextBlock() { Text = pickedExercise.Output, Width = 200 };
                 TextBlock exerciseType = new TextBlock() { Text = pickedExercise.ExerciseType.ToString().Replace('_', ' '), Width = 200 };
 
                 newPanel.Children.Add(exerciseName);

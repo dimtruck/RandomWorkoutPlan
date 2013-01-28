@@ -25,44 +25,47 @@ namespace WorkoutPicker.Entities
         /// output for run exercise
         /// </summary>
         /// <returns></returns>
-        public string Output()
+        public string Output
         {
-            StringBuilder builder = new StringBuilder();
-            //options
-            if (!String.IsNullOrEmpty(Name))
+            get
             {
-                if (Laps != 0)
+                StringBuilder builder = new StringBuilder();
+                //options
+                if (!String.IsNullOrEmpty(Name))
                 {
-                    if (Time.TotalMilliseconds > 0)
+                    if (Laps != 0)
+                    {
+                        if (Time.TotalMilliseconds > 0)
+                        {
+                            if (Distance != 0)
+                                builder.Append(new LapTimeDistanceTemplate().Create(Laps, Time, Distance));
+                            else
+                                builder.Append(new LapTimeTemplate().Create(Laps, Time));
+                        }
+                        else
+                        {
+                            if (Distance != 0)
+                                builder.Append(new LapDistanceTemplate().Create(Laps, Distance));
+                            else
+                                builder.Append(new LapTemplate().Create(Laps));
+                        }
+                    }
+                    else if (Time.TotalMilliseconds > 0)
                     {
                         if (Distance != 0)
-                            builder.Append(new LapTimeDistanceTemplate().Create(Laps, Time, Distance));
+                            builder.Append(new TimeDistanceTemplate().Create(Time, Distance));
                         else
-                            builder.Append(new LapTimeTemplate().Create(Laps, Time));
+                            builder.Append(new TimeTemplate().Create(Time));
                     }
-                    else
-                    {
-                        if (Distance != 0)
-                            builder.Append(new LapDistanceTemplate().Create(Laps, Distance));
-                        else
-                            builder.Append(new LapTemplate().Create(Laps));
-                    }
-                }
-                else if (Time.TotalMilliseconds > 0)
-                {
-                    if (Distance != 0)
-                        builder.Append(new TimeDistanceTemplate().Create(Time, Distance));
-                    else
-                        builder.Append(new TimeTemplate().Create(Time));
-                }
-                else if (Distance != 0)
-                    builder.Append(new DistanceTemplate().Create(Distance));
+                    else if (Distance != 0)
+                        builder.Append(new DistanceTemplate().Create(Distance));
 
+                }
+
+                //Name - Run ${distance}
+                //Name - Run ${distance} laps in ${time}
+                return builder.ToString();
             }
-               
-            //Name - Run ${distance}
-            //Name - Run ${distance} laps in ${time}
-            return builder.ToString();
         }
     }
 }
