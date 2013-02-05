@@ -18,6 +18,7 @@ namespace WorkoutPicker.Entities
     public class ExerciseList
     {
         private static IDictionary<string, IList<IExercise>> _exerciseList = new Dictionary<string, IList<IExercise>>();
+        private static ObservableCollection<WeatherSetting> weatherSettingList = new ObservableCollection<WeatherSetting>();
         
         private ExerciseList()
         {
@@ -77,14 +78,27 @@ namespace WorkoutPicker.Entities
 
         public static ObservableCollection<WeatherSetting> SetupWeatherSettingList()
         {
-            return new ObservableCollection<WeatherSetting>()
+            if (weatherSettingList == null || weatherSettingList.Count == 0)
             {
-                new WeatherSetting { NumberOfExercises=5, WeatherType = "HOT", Weight=1},
-                new WeatherSetting(){ NumberOfExercises=5, WeatherType = "NORMAL", Weight=1},
-                new WeatherSetting(){ NumberOfExercises=5, WeatherType = "COLD", Weight=1},
-                new WeatherSetting(){ NumberOfExercises=5, WeatherType = "SNOW", Weight=1},
-                new WeatherSetting(){ NumberOfExercises=5, WeatherType = "RAIN", Weight=1}
-            };
+                IList<WeatherSettingDTO> tempList = new List<WeatherSettingDTO>();
+                using (StreamReader reader = File.OpenText("weather_setting.json"))
+                using (JsonTextReader jsonReader = new JsonTextReader(reader))
+                {
+                    var serializer = new JsonSerializer();
+                    tempList = serializer.Deserialize<ObservableCollection<WeatherSettingDTO>>(jsonReader);
+                }
+
+                foreach (var item in tempList)
+                {
+                    weatherSettingList.Add(new WeatherSetting
+                    {
+                        WeatherType = item.WeatherType,
+                        NumberOfExercises = item.NumberOfExercises
+                    });
+                }
+
+            }
+            return weatherSettingList;
         }
 
     }

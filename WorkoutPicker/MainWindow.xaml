@@ -33,6 +33,7 @@
                         <GridView SelectiveScrollingGrid.SelectiveScrollingOrientation="Vertical">
                             <GridViewColumn Header="Exercise Name" DisplayMemberBinding="{Binding Name}" util:GridViewSort.PropertyName="Name" Width="150"/>
                             <GridViewColumn Header="Exercise Type" DisplayMemberBinding="{Binding ExerciseType}" util:GridViewSort.PropertyName="ExerciseType" Width="150"/>
+                            <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Combination}" util:GridViewSort.PropertyName="Combination" Width="150"/>
                             <GridViewColumn Header="# of Executions" DisplayMemberBinding="{Binding Count}" util:GridViewSort.PropertyName="Count" Width="100" />
                             <GridViewColumn Header="Best Performance" DisplayMemberBinding="{Binding BestScore}" Width="150" />
                             <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date}" util:GridViewSort.PropertyName="Date" Width="150" />
@@ -47,30 +48,24 @@
             </StackPanel>
             <StackPanel Name="SettingsPanel" Orientation="Vertical" Margin="15" Visibility="Collapsed" Width="750">
                 <TextBlock HorizontalAlignment="Center" FontFamily="Verdana" FontSize="15" Padding="15" Name="SettingsName">Settings</TextBlock>
-                <ListView HorizontalAlignment="Stretch" ItemsSource="{Binding WeatherTypeSettingCollection}" Margin="15"
-                    IsSynchronizedWithCurrentItem="True"
-                    util:GridViewSort.AutoSort="True"
-                    util:GridViewSort.ShowSortGlyph="False">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Weather Type" DisplayMemberBinding="{Binding WeatherType}" util:GridViewSort.PropertyName="WeatherType" Width="240"/>
-                            <GridViewColumn Header="Number of Exercises" DisplayMemberBinding="{Binding NumberOfExercises}" util:GridViewSort.PropertyName="NumberOfExercises" Width="240"/>
-                            <GridViewColumn Header="Weight" DisplayMemberBinding="{Binding Weight}" util:GridViewSort.PropertyName="Weight" Width="240"/>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-                <ListView HorizontalAlignment="Stretch" ItemsSource="{Binding ExerciseCollection}" Height="200" Margin="15"
-                    IsSynchronizedWithCurrentItem="True"
-                    util:GridViewSort.AutoSort="True"
-                    util:GridViewSort.ShowSortGlyph="False">
-                    <ListView.View>
-                        <GridView SelectiveScrollingGrid.SelectiveScrollingOrientation="Vertical">
-                            <GridViewColumn Header="Exercise Name" DisplayMemberBinding="{Binding Name}" util:GridViewSort.PropertyName="Name" Width="240" />
-                            <GridViewColumn Header="Exercise Type" DisplayMemberBinding="{Binding ExerciseType}" util:GridViewSort.PropertyName="ExerciseType" Width="240" />
-                            <GridViewColumn Header="Output" DisplayMemberBinding="{Binding Output}" util:GridViewSort.PropertyName="Output" Width="240" />
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                <DataGrid ItemsSource="{Binding WeatherTypeSettingCollection}" Margin="15" ScrollViewer.CanContentScroll="True"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Weather Type" Binding="{Binding WeatherType}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Number Of Exercises" Binding="{Binding NumberOfExercises}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <DataGrid ItemsSource="{Binding ExerciseCollection}" Margin="15" ScrollViewer.CanContentScroll="True"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" AutoGenerateColumns="False" Height="200">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Output" Binding="{Binding Output}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Exercise Type" Binding="{Binding ExerciseType}"  IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Exercise Weight" Binding="{Binding Weight}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+
             </StackPanel>
         </DockPanel>
     </Grid>

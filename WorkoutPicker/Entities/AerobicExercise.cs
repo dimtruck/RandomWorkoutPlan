@@ -19,6 +19,8 @@ namespace WorkoutPicker.Entities
 
         public float Distance { get; set; }
 
+        public float Weight { get; set; }
+
         public ExerciseType ExerciseType { get; set; }
 
         /// <summary>
@@ -67,5 +69,7 @@ namespace WorkoutPicker.Entities
                 return builder.ToString();
             }
         }
+
+        public float ExerciseWeight { get; set; }
     }
 }

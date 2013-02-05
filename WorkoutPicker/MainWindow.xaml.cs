@@ -191,4 +191,14 @@ namespace WorkoutPicker
         LONGEST_FOR_WEIGHT,
         MOST_REPS_FOR_TIME
     }
+
+
+    public enum WeatherSettingEnum
+    {
+        HOT,
+        COLD,
+        RAIN,
+        NORMAL,
+        SNOW
+    }
 }

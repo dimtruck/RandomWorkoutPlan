@@ -11,8 +11,6 @@ namespace WorkoutPicker.Builder
 {
     public abstract class ExerciseAbstractBuilder : IExerciseBuilder
     {
-        private IList<IExercise> _exerciseList;
-
         public IList<IExercise> BuildAerobicExercises()
         {
             IList<IExercise> exerciseList = new List<IExercise>();

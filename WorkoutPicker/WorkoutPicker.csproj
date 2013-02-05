@@ -64,6 +64,7 @@
     <Compile Include="Command\ICommand.cs" />
     <Compile Include="Command\SaveCommand.cs" />
     <Compile Include="Entities\BestExercise.cs" />
+    <Compile Include="Entities\WeatherSettingDTO.cs" />
     <Compile Include="Entities\CrossfitInsideExercise.cs" />
     <Compile Include="Entities\ExerciseToSave.cs" />
     <Compile Include="Entities\ICrossfitInside.cs" />

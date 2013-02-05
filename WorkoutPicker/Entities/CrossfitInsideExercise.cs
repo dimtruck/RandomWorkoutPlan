@@ -19,6 +19,8 @@ namespace WorkoutPicker.Entities
 
         public string Name { get; set; }
 
+        public float ExerciseWeight { get; set; }
+
         public string Output
         {
             get

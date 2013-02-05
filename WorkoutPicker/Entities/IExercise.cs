@@ -12,5 +12,6 @@ namespace WorkoutPicker.Entities
         String Name { get; set; }
         String Output { get; }
         ExerciseType ExerciseType { get; set; }
+        float ExerciseWeight { get; set; }
     }
 }

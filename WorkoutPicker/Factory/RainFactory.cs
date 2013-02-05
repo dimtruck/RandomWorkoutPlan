@@ -12,8 +12,6 @@ namespace WorkoutPicker.Factory
 {
     public class RainFactory : AbstractFactory
     {
-        private readonly int _exerciseCount = 5;
-
         public override IList<IExercise> CreateList()
         {
             return ExerciseList.GetExerciseList()[typeof(RainExerciseBuilder).Name];
@@ -22,7 +20,8 @@ namespace WorkoutPicker.Factory
 
         public override void BuildStackPanel(System.Windows.Controls.StackPanel panel)
         {
-            base.BuildStackPanel(panel, CreateList(), _exerciseCount);
+            base.BuildStackPanel(panel, CreateList(), 
+                ExerciseList.SetupWeatherSettingList().FirstOrDefault(t => t.WeatherType.Equals("RAIN")).NumberOfExercises);
         }
     }
 }
