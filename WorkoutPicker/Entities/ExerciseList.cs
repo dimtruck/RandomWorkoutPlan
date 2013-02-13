@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 using WorkoutPicker.Builder;
 using WorkoutPicker.Factory;
 using WorkoutPicker.Strategy;
+using WorkoutPicker.Utils;
 
 namespace WorkoutPicker.Entities
 {
@@ -101,5 +103,74 @@ namespace WorkoutPicker.Entities
             return weatherSettingList;
         }
 
+        public static IList<IExercise> ExerciseListUnique()
+        {
+            ISet<IExercise> tempList = new HashSet<IExercise>(new ExerciseComparer());
+            foreach (var exerciseListDictionary in Entities.ExerciseList.GetExerciseList())
+            {
+                IList<IExercise> exerciseList = exerciseListDictionary.Value;
+                foreach (var exercise in exerciseList)
+                    tempList.Add(exercise);
+            }
+            return tempList.ToList();
+        }
+
+        public static IList<BestExercise> CompileBestExerciseList()
+        {
+            IList<IExercise> tempList = ExerciseListUnique();
+            IList<BestExercise> bestExerciseList = new List<BestExercise>();
+            IDictionary<ExerciseType, ITemplateStrategy> templateDictionary = SetupTemplateDictionary();
+            foreach (ExerciseToSave item in ExerciseList.RetrieveSavedExercises())
+            {
+                if (bestExerciseList.FirstOrDefault(t => t.Id == item.Id) != null)
+                {
+                    //already exists
+                    BestExercise currentBestExercise = bestExerciseList.FirstOrDefault(t => t.Id == item.Id);
+                    BestExercise bestExercise = templateDictionary[item.ExerciseType].CompareExercisesByTopScore(currentBestExercise, new BestExercise()
+                    {
+                        Combination = tempList.First(t => t.Id == item.Id).Output,
+                        ExerciseType = item.ExerciseType,
+                        Name = item.Name,
+                        BestScore = templateDictionary[item.ExerciseType].CreateBestScore(item),
+                        Date = item.DateToSave,
+                        Id = item.Id,
+                        Count = 1
+                    });
+                    bestExercise.Count = currentBestExercise.Count + 1;
+                    bestExerciseList.Remove(currentBestExercise);
+                    bestExerciseList.Add(bestExercise);
+                }
+                else
+                {
+                    //doesn't exist
+                    bestExerciseList.Add(new BestExercise()
+                    {
+                        Combination = tempList.First(t => t.Id == item.Id).Output,
+                        ExerciseType = item.ExerciseType,
+                        Name = item.Name,
+                        BestScore = templateDictionary[item.ExerciseType].CreateBestScore(item),
+                        Date = item.DateToSave,
+                        Id = item.Id,
+                        Count = 1
+                    });
+                }
+            }
+            return bestExerciseList;
+        }
+
+        public static IList<ExerciseToSave> RetrieveSavedExercises()
+        {
+            IList<ExerciseToSave> exerciseList = new List<ExerciseToSave>();
+            //show all workouts here
+            using (TextReader writer = new StreamReader("exercises.json"))
+            using (JsonTextReader jsonWriter = new JsonTextReader(writer))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Converters.Add(new JavaScriptDateTimeConverter());
+                serializer.NullValueHandling = NullValueHandling.Ignore;
+                exerciseList = serializer.Deserialize<IList<ExerciseToSave>>(jsonWriter);
+            }
+            return exerciseList;
+        }
     }
 }

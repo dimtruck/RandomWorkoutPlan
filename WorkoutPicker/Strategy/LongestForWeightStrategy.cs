@@ -12,11 +12,11 @@ namespace WorkoutPicker.Strategy
     {
         public System.Windows.Controls.StackPanel Build()
         {
-            StackPanel panel = new StackPanel() { Orientation = Orientation.Horizontal };
-            TextBlock timeText = new TextBlock() { Text = "Time: ", Width = 100 };
-            TextBox timeBox = new TextBox() { Width = 20, Name = "Time" };
-            TextBlock weightText = new TextBlock() { Text = "Weight: ", Width = 100 };
-            TextBox weightBox = new TextBox() { Width = 30, Name = "Weight" };
+            StackPanel panel = new StackPanel() { Orientation = Orientation.Horizontal, Width = 200 };
+            TextBlock timeText = new TextBlock() { Text = "Time: ", Width = 60, FontSize = 12 };
+            TextBox timeBox = new TextBox() { Width = 40, Name = "Time", FontSize = 12 };
+            TextBlock weightText = new TextBlock() { Text = "Weight: ", Width = 55, FontSize = 12 };
+            TextBox weightBox = new TextBox() { Width = 45, Name = "Weight", FontSize = 12 };
             panel.Children.Add(timeText);
             panel.Children.Add(timeBox);
             panel.Children.Add(weightText);

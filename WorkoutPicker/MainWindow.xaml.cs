@@ -26,7 +26,7 @@ namespace WorkoutPicker
         private readonly IDictionary<String, IFactory> factoryDictionary = Entities.ExerciseList.SetupFactoryDictionary();
         private readonly IDictionary<String, IList<IExercise>> exerciseDictionary = Entities.ExerciseList.GetExerciseList();
         private ObservableCollection<WeatherSetting> _weatherTypeSettingCollection = Entities.ExerciseList.SetupWeatherSettingList();
-        private ObservableCollection<IExercise> _exerciseCollection = new ObservableCollection<IExercise>(FlattenExerciseListDictionary());
+        private ObservableCollection<IExercise> _exerciseCollection = new ObservableCollection<IExercise>(Entities.ExerciseList.ExerciseListUnique());
         private ObservableCollection<BestExercise> _bestExerciseCollection = new ObservableCollection<BestExercise>();
 
         Random r = new Random(352333);
@@ -35,7 +35,7 @@ namespace WorkoutPicker
             InitializeComponent();
             Exercise.Text = "Exercises for " + DateTime.Today;
             //here combine by id, get type for each id and based on type, look at highest value
-            IList<BestExercise> bestExerciseList = CompileBestExerciseList(RetrieveSavedExercises(), FlattenExerciseListDictionary());
+            IList<BestExercise> bestExerciseList = Entities.ExerciseList.CompileBestExerciseList();
             _bestExerciseCollection.Clear();
             foreach (var item in bestExerciseList)
                 _bestExerciseCollection.Add(item);
@@ -67,70 +67,6 @@ namespace WorkoutPicker
 
             MessageBox.Show("Completion successful.", "This has been stored.  Ready for querying!!");
             WeatherType.SelectedItem = null;
-        }
-
-        private IList<BestExercise> CompileBestExerciseList(IList<ExerciseToSave> exerciseList, List<IExercise> tempList)
-        {
-            IList<BestExercise> bestExerciseList = new List<BestExercise>();
-            foreach (ExerciseToSave item in exerciseList)
-            {
-                if (bestExerciseList.FirstOrDefault(t => t.Id == item.Id) != null)
-                {
-                    //already exists
-                    BestExercise currentBestExercise = bestExerciseList.FirstOrDefault(t => t.Id == item.Id);
-                    BestExercise bestExercise = templateDictionary[item.ExerciseType].CompareExercisesByTopScore(currentBestExercise, new BestExercise()
-                    {
-                        Combination = tempList.First(t => t.Id == item.Id).Output,
-                        ExerciseType = item.ExerciseType,
-                        Name = item.Name,
-                        BestScore = templateDictionary[item.ExerciseType].CreateBestScore(item),
-                        Date = item.DateToSave,
-                        Id = item.Id,
-                        Count = 1
-                    });
-                    bestExercise.Count = currentBestExercise.Count + 1;
-                    bestExerciseList.Remove(currentBestExercise);
-                    bestExerciseList.Add(bestExercise);
-                }
-                else
-                {
-                    //doesn't exist
-                    bestExerciseList.Add(new BestExercise()
-                    {
-                        Combination = tempList.First(t => t.Id == item.Id).Output,
-                        ExerciseType = item.ExerciseType,
-                        Name = item.Name,
-                        BestScore = templateDictionary[item.ExerciseType].CreateBestScore(item),
-                        Date = item.DateToSave,
-                        Id = item.Id,
-                        Count = 1
-                    });
-                }
-            }
-            return bestExerciseList;
-        }
-
-        private static List<IExercise> FlattenExerciseListDictionary()
-        {
-            List<IExercise> tempList = new List<IExercise>();
-            foreach (var item in Entities.ExerciseList.GetExerciseList())
-                tempList.AddRange(item.Value);
-            return tempList.Distinct(new ExerciseComparer()).ToList();
-        }
-
-        private static IList<ExerciseToSave> RetrieveSavedExercises()
-        {
-            IList<ExerciseToSave> exerciseList = new List<ExerciseToSave>();
-            //show all workouts here
-            using (TextReader writer = new StreamReader("exercises.json"))
-            using (JsonTextReader jsonWriter = new JsonTextReader(writer))
-            {
-                JsonSerializer serializer = new JsonSerializer();
-                serializer.Converters.Add(new JavaScriptDateTimeConverter());
-                serializer.NullValueHandling = NullValueHandling.Ignore;
-                exerciseList = serializer.Deserialize<IList<ExerciseToSave>>(jsonWriter);
-            }
-            return exerciseList;
         }
     }
 

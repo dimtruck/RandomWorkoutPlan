@@ -12,7 +12,8 @@ namespace WorkoutPicker.Strategy
     {
         public System.Windows.Controls.StackPanel Build()
         {
-            return new StackPanel();
+            return new StackPanel() { Orientation = Orientation.Horizontal, Width = 200 };
+
         }
 
 

@@ -98,8 +98,6 @@
     <Compile Include="Template\SetRepTemplate.cs" />
     <Compile Include="Template\TimeDistanceTemplate.cs" />
     <Compile Include="Template\TimeTemplate.cs" />
-    <Compile Include="Utils\ContentToMarginConverter.cs" />
-    <Compile Include="Utils\ContentToPathConverter.cs" />
     <Compile Include="Utils\ExerciseComparer.cs" />
     <Compile Include="Utils\GridViewSort.cs" />
     <Page Include="MainWindow.xaml">

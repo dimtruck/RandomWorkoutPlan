@@ -13,8 +13,8 @@ namespace WorkoutPicker.Strategy
         public System.Windows.Controls.StackPanel Build()
         {
             StackPanel panel = new StackPanel() { Orientation = Orientation.Horizontal };
-            TextBlock timeText = new TextBlock() { Text = "Time: ", Width = 100 };
-            TextBox timeBox = new TextBox() { Width = 100, Name="Time" };
+            TextBlock timeText = new TextBlock() { Text = "Time: ", Width = 100, FontSize = 12 };
+            TextBox timeBox = new TextBox() { Width = 100, Name = "Time", FontSize = 12 };
             panel.Children.Add(timeText);
             panel.Children.Add(timeBox);
             return panel;

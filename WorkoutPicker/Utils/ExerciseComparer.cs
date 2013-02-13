@@ -16,7 +16,7 @@ namespace WorkoutPicker.Utils
 
         public int GetHashCode(IExercise obj)
         {
-            return obj.GetHashCode();
+            return obj.Id + 17 * 42;
         }
     }
 }

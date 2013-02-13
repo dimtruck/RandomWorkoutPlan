@@ -12,9 +12,9 @@ namespace WorkoutPicker.Strategy
     {
         public System.Windows.Controls.StackPanel Build()
         {
-            StackPanel panel = new StackPanel() { Orientation = Orientation.Horizontal };
-            TextBlock weightText = new TextBlock() { Text = "Weight: ", Width = 100 };
-            TextBox weightBox = new TextBox() { Width = 100, Name="Weight" };
+            StackPanel panel = new StackPanel() { Orientation = Orientation.Horizontal, Width = 200 };
+            TextBlock weightText = new TextBlock() { Text = "Weight: ", Width = 100, FontSize = 12 };
+            TextBox weightBox = new TextBox() { Width = 100, Name = "Weight", FontSize = 12 };
             panel.Children.Add(weightText);
             panel.Children.Add(weightBox);
             return panel;
