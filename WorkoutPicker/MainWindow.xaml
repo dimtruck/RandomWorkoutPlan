@@ -1,72 +1,156 @@
 ﻿<Window x:Class="WorkoutPicker.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:util="clr-namespace:WorkoutPicker.Utils"
+        xmlns:src="clr-namespace:WorkoutPicker.Utils"
         Title="MainWindow" Height="550" Width="825">
+    <Window.Resources>
+        <Style TargetType="{x:Type TabItem}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabItem}">
+                        <Grid>
+                            <Border 
+                              Name="Border"
+                              Background="LightBlue"
+                              BorderBrush="Black" 
+                              BorderThickness="1,1,1,1" 
+                              CornerRadius="6,6,0,0" >
+                                <ContentPresenter x:Name="ContentSite"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"
+                                    ContentSource="Header"
+                                    Margin="12,2,12,2"/>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="LightBlue" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="False">
+                                <Setter TargetName="Border" Property="Background" Value="LightGray" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type TabControl}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabControl}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TabPanel 
+                              Grid.Row="0"
+                              Panel.ZIndex="1" 
+                              Margin="0,0,4,-1" 
+                              IsItemsHost="True"
+                              Background="Transparent" />
+                            <Border 
+                                  Grid.Row="1"
+                                  BorderBrush="Black" 
+                                  BorderThickness="1" 
+                                  CornerRadius="0, 12, 12, 12" >
+                                <Border.Background>
+                                    <LinearGradientBrush>
+                                        <GradientStop Color="LightBlue" Offset="0" />
+                                        <GradientStop Color="White" Offset="1" />
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <ContentPresenter ContentSource="SelectedContent" />
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Grid>
-        <DockPanel LastChildFill="True">
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                <Label Name="WeatherTypeLabel" Margin="8">Weather Type:</Label>
-                <ListBox Name="WeatherType" Margin="8" Height="22" Width="214" SelectionChanged="WeatherType_SelectionChanged_1" >
-                    <ListBoxItem>Normal</ListBoxItem>
-                    <ListBoxItem>Cold</ListBoxItem>
-                    <ListBoxItem>Rain</ListBoxItem>
-                    <ListBoxItem>Snow</ListBoxItem>
-                    <ListBoxItem>Hot</ListBoxItem>
-                </ListBox>
-                <Button Name="Settings" Content="Settings" Click="Settings_Click_1" Margin="35 0 0 0"></Button>
-                <Button Name="TrendsToggle" Content="Historical Trend" Click="Trends_Click_1" Margin="35 0 0 0"></Button>
-            </StackPanel>
-            <StackPanel Name="SavePanel" Orientation="Horizontal" Margin="15" HorizontalAlignment="Center" DockPanel.Dock="Bottom">
-                <Button Name="Save" Content="Save" Padding="15" Click="Save_Click_1"></Button>
-            </StackPanel>
-            <DockPanel VerticalAlignment="Center" Name="TrendDataPanel" Margin="15" Visibility="Collapsed" Width="750">
-                <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Center" FontFamily="Verdana" FontSize="15" Padding="15" Name="HistoricalResultName">Trend Data</TextBlock>
-                <ListView 
+        <TabControl Grid.Row="0" Grid.Column="1" Margin="5" TabStripPlacement="Top" FontSize="16">
+            <TabItem Header="Workout">
+                <Border Margin="10">
+                    <StackPanel Name="ExercisesPanel" Orientation="Vertical">
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                            <Label Name="WeatherTypeLabel" Margin="8">Weather Type:</Label>
+                            <ListBox Name="WeatherType" Margin="8" Height="22" Width="214" SelectionChanged="WeatherType_SelectionChanged_1" >
+                                <ListBoxItem>Normal</ListBoxItem>
+                                <ListBoxItem>Cold</ListBoxItem>
+                                <ListBoxItem>Rain</ListBoxItem>
+                                <ListBoxItem>Snow</ListBoxItem>
+                                <ListBoxItem>Hot</ListBoxItem>
+                            </ListBox>
+                        </StackPanel>
+                        <StackPanel Name="ExerciseListPanel" Orientation="Vertical" Margin="15" Visibility="Visible" Width="750">
+                            <TextBlock HorizontalAlignment="Center" FontFamily="Verdana" FontSize="15" Padding="15" Name="Exercise">Exercises Here:</TextBlock>
+                            <StackPanel Name="ExerciseList" Orientation="Vertical">
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Name="SavePanel" Orientation="Horizontal" Margin="15" HorizontalAlignment="Center" DockPanel.Dock="Bottom">
+                            <Button Name="Save" Content="Save" Padding="15" Click="Save_Click_1"></Button>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </TabItem>
+            <TabItem Header="Exercises">
+                <Border Margin="10">
+                    <DataGrid ItemsSource="{Binding ExerciseCollection}" Margin="15" ScrollViewer.CanContentScroll="True"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" AutoGenerateColumns="False" Height="200">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Output" Binding="{Binding Output}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Exercise Type" Binding="{Binding ExerciseType}"  IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Exercise Weight" Binding="{Binding Weight}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Border>
+            </TabItem>
+            <TabItem Header="Profile">
+                <Border Margin="10">
+                    <TextBlock Text="Place holder for user profile"/>
+                </Border>
+            </TabItem>
+            <TabItem Header="History">
+                <Border Margin="10">
+                    <ListView 
                     HorizontalAlignment="Stretch"
                     ItemsSource="{Binding BestExerciseCollection}"
                     Height="300" Margin="15" 
                     IsSynchronizedWithCurrentItem="True"
-                    util:GridViewSort.AutoSort="True"
-                    util:GridViewSort.ShowSortGlyph="False">
-                    <ListView.View>
-                        <GridView SelectiveScrollingGrid.SelectiveScrollingOrientation="Vertical">
-                            <GridViewColumn Header="Exercise Name" DisplayMemberBinding="{Binding Name}" util:GridViewSort.PropertyName="Name" Width="150"/>
-                            <GridViewColumn Header="Exercise Type" DisplayMemberBinding="{Binding ExerciseType}" util:GridViewSort.PropertyName="ExerciseType" Width="150"/>
-                            <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Combination}" util:GridViewSort.PropertyName="Combination" Width="150"/>
-                            <GridViewColumn Header="# of Executions" DisplayMemberBinding="{Binding Count}" util:GridViewSort.PropertyName="Count" Width="100" />
-                            <GridViewColumn Header="Best Performance" DisplayMemberBinding="{Binding BestScore}" Width="150" />
-                            <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date}" util:GridViewSort.PropertyName="Date" Width="150" />
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </DockPanel>
-            <StackPanel Name="ExerciseListPanel" Orientation="Vertical" Margin="15" Visibility="Visible" Width="750">
-                <TextBlock HorizontalAlignment="Center" FontFamily="Verdana" FontSize="15" Padding="15" Name="Exercise">Exercises Here:</TextBlock>
-                <StackPanel Name="ExerciseList" Orientation="Vertical">
-                </StackPanel>
-            </StackPanel>
-            <StackPanel Name="SettingsPanel" Orientation="Vertical" Margin="15" Visibility="Collapsed" Width="750">
-                <TextBlock HorizontalAlignment="Center" FontFamily="Verdana" FontSize="15" Padding="15" Name="SettingsName">Settings</TextBlock>
-                <DataGrid ItemsSource="{Binding WeatherTypeSettingCollection}" Margin="15" ScrollViewer.CanContentScroll="True"
+                    src:GridViewSort.AutoSort="True"
+                    src:GridViewSort.ShowSortGlyph="False">
+                        <ListView.View>
+                            <GridView SelectiveScrollingGrid.SelectiveScrollingOrientation="Vertical">
+                                <GridViewColumn Header="Exercise Name" DisplayMemberBinding="{Binding Name}" src:GridViewSort.PropertyName="Name" Width="150"/>
+                                <GridViewColumn Header="Exercise Type" DisplayMemberBinding="{Binding ExerciseType}" src:GridViewSort.PropertyName="ExerciseType" Width="150"/>
+                                <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Combination}" src:GridViewSort.PropertyName="Combination" Width="150"/>
+                                <GridViewColumn Header="# of Executions" DisplayMemberBinding="{Binding Count}" src:GridViewSort.PropertyName="Count" Width="100" />
+                                <GridViewColumn Header="Best Performance" DisplayMemberBinding="{Binding BestScore}" Width="150" />
+                                <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date}" src:GridViewSort.PropertyName="Date" Width="150" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Border>
+            </TabItem>
+            <TabItem Header="Equipment">
+                <Border Margin="10">
+                    <TextBlock Text="Place holder for user profile"/>
+                </Border>
+            </TabItem>
+            <TabItem Header="Weather">
+                <Border Margin="10">
+                    <DataGrid ItemsSource="{Binding WeatherTypeSettingCollection}" Margin="15" ScrollViewer.CanContentScroll="True"
                           ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" AutoGenerateColumns="False">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Weather Type" Binding="{Binding WeatherType}" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="Number Of Exercises" Binding="{Binding NumberOfExercises}"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-
-                <DataGrid ItemsSource="{Binding ExerciseCollection}" Margin="15" ScrollViewer.CanContentScroll="True"
-                          ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" AutoGenerateColumns="False" Height="200">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="Output" Binding="{Binding Output}" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="Exercise Type" Binding="{Binding ExerciseType}"  IsReadOnly="True"/>
-                        <DataGridTextColumn Header="Exercise Weight" Binding="{Binding Weight}" />
-                    </DataGrid.Columns>
-                </DataGrid>
-
-            </StackPanel>
-        </DockPanel>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Weather Type" Binding="{Binding WeatherType}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Number Of Exercises" Binding="{Binding NumberOfExercises}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Border>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

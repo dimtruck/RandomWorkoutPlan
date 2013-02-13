@@ -42,7 +42,7 @@ namespace WorkoutPicker.Entities
                         else
                         {
                             if (Sets > 0)
-                                builder.Append(new SetRepTemplate().Create(Reps, Time));
+                                builder.Append(new SetRepTemplate().Create(Sets, Reps));
                             else
                                 builder.Append(new RepTemplate().Create(Reps));
                         }

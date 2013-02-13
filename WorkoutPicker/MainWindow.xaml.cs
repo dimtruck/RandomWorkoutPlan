@@ -34,6 +34,12 @@ namespace WorkoutPicker
         {
             InitializeComponent();
             Exercise.Text = "Exercises for " + DateTime.Today;
+            //here combine by id, get type for each id and based on type, look at highest value
+            IList<BestExercise> bestExerciseList = CompileBestExerciseList(RetrieveSavedExercises(), FlattenExerciseListDictionary());
+            _bestExerciseCollection.Clear();
+            foreach (var item in bestExerciseList)
+                _bestExerciseCollection.Add(item);
+            this.DataContext = this;
         }
 
         public ObservableCollection<WeatherSetting> WeatherTypeSettingCollection { get { return _weatherTypeSettingCollection; } }
@@ -63,58 +69,6 @@ namespace WorkoutPicker
             WeatherType.SelectedItem = null;
         }
 
-        private void Settings_Click_1(object sender, RoutedEventArgs e)
-        {
-            ExerciseListPanel.Visibility = System.Windows.Visibility.Collapsed;
-            SavePanel.Visibility = System.Windows.Visibility.Collapsed;
-            SettingsPanel.Visibility = System.Windows.Visibility.Visible;
-            TrendDataPanel.Visibility = System.Windows.Visibility.Collapsed;
-            WeatherType.IsEnabled = false;
-            this.DataContext = this;
-        }
-
-        private void Trends_Click_1(object sender, RoutedEventArgs e)
-        {
-            //show a all workouts in a table.  show # of completions, goal, best score, and date best score was achieved.
-            //show weighted list
-            if (SettingsPanel.Visibility == System.Windows.Visibility.Visible && TrendsToggle.Content.Equals("Exercise List"))
-                ViewExerciseListPanel();
-            else if (SettingsPanel.Visibility == System.Windows.Visibility.Visible && TrendsToggle.Content.Equals("Historical Trend"))
-                ViewTrendPanel();
-            else if (ExerciseListPanel.Visibility == System.Windows.Visibility.Visible)
-                ViewTrendPanel();
-            else
-                ViewExerciseListPanel();
-        }
-
-        private void ViewExerciseListPanel()
-        {
-            WeatherType.IsEnabled = true;
-            TrendsToggle.Content = "Historical Trend";
-            ExerciseListPanel.Visibility = System.Windows.Visibility.Visible;
-            TrendDataPanel.Visibility = System.Windows.Visibility.Collapsed;
-            SavePanel.Visibility = System.Windows.Visibility.Visible;
-            SettingsPanel.Visibility = System.Windows.Visibility.Collapsed;
-        }
-
-
-
-        private void ViewTrendPanel()
-        {
-            TrendsToggle.Content = "Exercise List";
-            ExerciseListPanel.Visibility = System.Windows.Visibility.Collapsed;
-            SavePanel.Visibility = System.Windows.Visibility.Collapsed;
-            SettingsPanel.Visibility = System.Windows.Visibility.Collapsed;
-            TrendDataPanel.Visibility = System.Windows.Visibility.Visible;
-            WeatherType.IsEnabled = false;
-
-            //here combine by id, get type for each id and based on type, look at highest value
-            IList<BestExercise> bestExerciseList = CompileBestExerciseList( RetrieveSavedExercises(), FlattenExerciseListDictionary());
-            _bestExerciseCollection.Clear();
-            foreach (var item in bestExerciseList)
-                _bestExerciseCollection.Add(item);
-            this.DataContext = this;
-        }
         private IList<BestExercise> CompileBestExerciseList(IList<ExerciseToSave> exerciseList, List<IExercise> tempList)
         {
             IList<BestExercise> bestExerciseList = new List<BestExercise>();
