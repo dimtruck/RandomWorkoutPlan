@@ -137,7 +137,13 @@
             </TabItem>
             <TabItem Header="Equipment">
                 <Border Margin="10">
-                    <TextBlock Text="Place holder for user profile"/>
+                    <DataGrid ItemsSource="{Binding EquipmentCollection}" Name="EquipmentPanel" Margin="15" ScrollViewer.CanContentScroll="True"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Exercises" Binding="{Binding FlattenedExercises}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Border>
             </TabItem>
             <TabItem Header="Weather">
@@ -146,7 +152,7 @@
                           ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" AutoGenerateColumns="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Weather Type" Binding="{Binding WeatherType}" IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Number Of Exercises" Binding="{Binding NumberOfExercises}"/>
+                            <DataGridTextColumn Header="Number Of Exercises" Binding="{Binding NumberOfExercises}" IsReadOnly="True"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Border>

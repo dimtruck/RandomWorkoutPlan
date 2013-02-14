@@ -21,6 +21,7 @@ namespace WorkoutPicker.Entities
     {
         private static IDictionary<string, IList<IExercise>> _exerciseList = new Dictionary<string, IList<IExercise>>();
         private static ObservableCollection<WeatherSetting> weatherSettingList = new ObservableCollection<WeatherSetting>();
+        private static IList<IExercise> _exerciseListUnique = new List<IExercise>();
         
         private ExerciseList()
         {
@@ -105,14 +106,18 @@ namespace WorkoutPicker.Entities
 
         public static IList<IExercise> ExerciseListUnique()
         {
-            ISet<IExercise> tempList = new HashSet<IExercise>(new ExerciseComparer());
-            foreach (var exerciseListDictionary in Entities.ExerciseList.GetExerciseList())
+            if (_exerciseListUnique == null || _exerciseListUnique.Count == 0)
             {
-                IList<IExercise> exerciseList = exerciseListDictionary.Value;
-                foreach (var exercise in exerciseList)
-                    tempList.Add(exercise);
+                ISet<IExercise> tempList = new HashSet<IExercise>(new ExerciseComparer());
+                foreach (var exerciseListDictionary in Entities.ExerciseList.GetExerciseList())
+                {
+                    IList<IExercise> exerciseList = exerciseListDictionary.Value;
+                    foreach (var exercise in exerciseList)
+                        tempList.Add(exercise);
+                }
+                _exerciseListUnique = tempList.ToList();
             }
-            return tempList.ToList();
+            return _exerciseListUnique;
         }
 
         public static IList<BestExercise> CompileBestExerciseList()
@@ -171,6 +176,20 @@ namespace WorkoutPicker.Entities
                 exerciseList = serializer.Deserialize<IList<ExerciseToSave>>(jsonWriter);
             }
             return exerciseList;
+        }
+
+        public static IList<Equipment> RetrieveEquipment()
+        {
+            IList<Equipment> equipmentList = new List<Equipment>();
+            using (TextReader writer = new StreamReader("equipment.json"))
+            using (JsonTextReader jsonWriter = new JsonTextReader(writer))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Converters.Add(new JavaScriptDateTimeConverter());
+                serializer.NullValueHandling = NullValueHandling.Ignore;
+                equipmentList = serializer.Deserialize<IList<Equipment>>(jsonWriter);
+            }
+            return equipmentList;
         }
     }
 }

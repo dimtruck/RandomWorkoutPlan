@@ -28,6 +28,7 @@ namespace WorkoutPicker
         private ObservableCollection<WeatherSetting> _weatherTypeSettingCollection = Entities.ExerciseList.SetupWeatherSettingList();
         private ObservableCollection<IExercise> _exerciseCollection = new ObservableCollection<IExercise>(Entities.ExerciseList.ExerciseListUnique());
         private ObservableCollection<BestExercise> _bestExerciseCollection = new ObservableCollection<BestExercise>();
+        private ObservableCollection<Equipment> _equipmentCollection = new ObservableCollection<Equipment>(Entities.ExerciseList.RetrieveEquipment());
 
         Random r = new Random(352333);
         public MainWindow()
@@ -47,6 +48,8 @@ namespace WorkoutPicker
         public ObservableCollection<IExercise> ExerciseCollection { get { return _exerciseCollection; } }
 
         public ObservableCollection<BestExercise> BestExerciseCollection { get { return _bestExerciseCollection; } }
+
+        public ObservableCollection<Equipment> EquipmentCollection { get { return _equipmentCollection; } }
 
         private void WeatherType_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         {
@@ -68,6 +71,8 @@ namespace WorkoutPicker
             MessageBox.Show("Completion successful.", "This has been stored.  Ready for querying!!");
             WeatherType.SelectedItem = null;
         }
+
+    
     }
 
     public enum ExerciseType
