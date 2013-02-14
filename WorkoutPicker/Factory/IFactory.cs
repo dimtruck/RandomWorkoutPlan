@@ -15,6 +15,6 @@ namespace WorkoutPicker.Factory
 
         IFactory SetStrategyDictionary(IDictionary<ExerciseType, ITemplateStrategy> strategyDictionary);
 
-        void BuildStackPanel(StackPanel panel);
+        void BuildStackPanel(StackPanel panel, IList<string> selectedEquipmentList);
     }
 }

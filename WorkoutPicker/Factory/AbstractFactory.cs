@@ -12,6 +12,7 @@ namespace WorkoutPicker.Factory
     public abstract class AbstractFactory: IFactory
     {
         protected IDictionary<ExerciseType, ITemplateStrategy> _strategyDictionary;
+        protected IList<int> _allowedExerciseList;
 
         public void BuildStackPanel(StackPanel panel, IList<IExercise> exerciseList, int exerciseCount)
         {
@@ -20,7 +21,15 @@ namespace WorkoutPicker.Factory
             Random r = new Random(ticks);
             for (int i = 0; i < exerciseCount; i++)
             {
-                IExercise pickedExercise = exerciseList[r.Next(exerciseList.Count)];
+                bool isValid = false;
+                IExercise pickedExercise = null;
+                while (!isValid)
+                {
+                    pickedExercise = exerciseList[r.Next(exerciseList.Count)];
+                    isValid = true;
+                    if (_allowedExerciseList != null && _allowedExerciseList.Count > 0)
+                        isValid = _allowedExerciseList.Contains(pickedExercise.Id);
+                }
                 StackPanel newPanel = new StackPanel() { Margin = new System.Windows.Thickness(5), Name = pickedExercise.Name.Replace(' ', '_') };
                 newPanel.Orientation = Orientation.Horizontal;
                 TextBlock exerciseName = new TextBlock() { Text = pickedExercise.Name, Width = 100, Name = "Id_" + pickedExercise.Id.ToString(), FontSize = 12 };
@@ -52,5 +61,20 @@ namespace WorkoutPicker.Factory
         }
 
         public abstract void BuildStackPanel(StackPanel panel);
+
+        public virtual void BuildStackPanel(StackPanel panel, IList<string> allowedEquipmentList)
+        {
+            if (allowedEquipmentList != null && allowedEquipmentList.Count > 0)
+            {
+                //generate exercise list that's allowed
+                IList<Equipment> equipmentList = ExerciseList.RetrieveEquipment();
+                List<int> temp = new List<int>();
+                foreach(Equipment e in equipmentList.Where(t => allowedEquipmentList.Contains(t.Name)))
+                    temp.AddRange(e.Exercises);
+                temp.AddRange(equipmentList.First(t => t.Name.Equals("none")).Exercises);
+                _allowedExerciseList = temp;
+            }
+            BuildStackPanel(panel);
+        }
     }
 }

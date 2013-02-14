@@ -41,6 +41,7 @@ namespace WorkoutPicker
             foreach (var item in bestExerciseList)
                 _bestExerciseCollection.Add(item);
             this.DataContext = this;
+            EquipmentList.ItemsSource = Entities.ExerciseList.RetrieveEquipment().Where(t => !t.Name.Equals("none")).Select(t => t.Name);
         }
 
         public ObservableCollection<WeatherSetting> WeatherTypeSettingCollection { get { return _weatherTypeSettingCollection; } }
@@ -51,15 +52,18 @@ namespace WorkoutPicker
 
         public ObservableCollection<Equipment> EquipmentCollection { get { return _equipmentCollection; } }
 
-        private void WeatherType_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
+        private void GenerateWorkout_Click_1(object sender, RoutedEventArgs e)
         {
             ExerciseList.Children.RemoveRange(0, ExerciseList.Children.Count);
 
             if (WeatherType.SelectedItem != null)
             {
                 String selectedItem = ((System.Windows.Controls.ListBoxItem)WeatherType.SelectedItem).Content.ToString().ToUpper();
+                IList<string> selectedList = new List<string>();
+                foreach (String item in EquipmentList.SelectedItems)
+                    selectedList.Add(item);
                 if (factoryDictionary != null && factoryDictionary.ContainsKey(selectedItem))
-                    factoryDictionary[selectedItem].SetStrategyDictionary(templateDictionary).BuildStackPanel(ExerciseList);
+                    factoryDictionary[selectedItem].SetStrategyDictionary(templateDictionary).BuildStackPanel(ExerciseList, selectedList);
             }
         }
 
@@ -71,6 +75,7 @@ namespace WorkoutPicker
             MessageBox.Show("Completion successful.", "This has been stored.  Ready for querying!!");
             WeatherType.SelectedItem = null;
         }
+
 
     
     }
