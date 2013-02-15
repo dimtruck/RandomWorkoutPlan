@@ -13,6 +13,7 @@ namespace WorkoutPicker.Strategy
     {
         StackPanel Build();
         dynamic CreateBestScore(ExerciseToSave exercise);
+        double CreateChartedScore(ExerciseToSave exercise);
         BestExercise CompareExercisesByTopScore(BestExercise oldExercise, BestExercise newExercise);
         Paragraph BuildParagraph(BestExercise exercise);
     }

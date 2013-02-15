@@ -40,5 +40,11 @@ namespace WorkoutPicker.Strategy
         {
             return new Paragraph(new Run(exercise.BestScore.ToString()));
         }
+
+
+        public double CreateChartedScore(Entities.ExerciseToSave exercise)
+        {
+            return exercise.Time.TotalMilliseconds;
+        }
     }
 }

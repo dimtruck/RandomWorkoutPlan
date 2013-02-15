@@ -29,6 +29,7 @@ namespace WorkoutPicker
         private ObservableCollection<IExercise> _exerciseCollection = new ObservableCollection<IExercise>(Entities.ExerciseList.ExerciseListUnique());
         private ObservableCollection<BestExercise> _bestExerciseCollection = new ObservableCollection<BestExercise>();
         private ObservableCollection<Equipment> _equipmentCollection = new ObservableCollection<Equipment>(Entities.ExerciseList.RetrieveEquipment());
+        private ObservableCollection<BestExercise> _uniqueExerciseSelectionCollection = new ObservableCollection<BestExercise>();
 
         Random r = new Random(352333);
         public MainWindow()
@@ -42,6 +43,7 @@ namespace WorkoutPicker
                 _bestExerciseCollection.Add(item);
             this.DataContext = this;
             EquipmentList.ItemsSource = Entities.ExerciseList.RetrieveEquipment().Where(t => !t.Name.Equals("none")).Select(t => t.Name);
+            GraphExerciseList.ItemsSource = _exerciseCollection;
         }
 
         public ObservableCollection<WeatherSetting> WeatherTypeSettingCollection { get { return _weatherTypeSettingCollection; } }
@@ -51,6 +53,8 @@ namespace WorkoutPicker
         public ObservableCollection<BestExercise> BestExerciseCollection { get { return _bestExerciseCollection; } }
 
         public ObservableCollection<Equipment> EquipmentCollection { get { return _equipmentCollection; } }
+
+        public ObservableCollection<BestExercise> UniqueExerciseSelectionCollection { get { return _uniqueExerciseSelectionCollection; } }
 
         private void GenerateWorkout_Click_1(object sender, RoutedEventArgs e)
         {
@@ -74,6 +78,29 @@ namespace WorkoutPicker
 
             MessageBox.Show("Completion successful.", "This has been stored.  Ready for querying!!");
             WeatherType.SelectedItem = null;
+        }
+
+        private void UniqueExerciseList_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
+        {
+            //get select 
+            IExercise selectedExercise = (IExercise)GraphExerciseList.SelectedItem;
+            _uniqueExerciseSelectionCollection.Clear();
+            IEnumerable<ExerciseToSave> savedExercisesList = Entities.ExerciseList.RetrieveSavedExercises().Where(t => t.Id == selectedExercise.Id);
+            foreach (ExerciseToSave item in savedExercisesList)
+            {
+                _uniqueExerciseSelectionCollection.Add(new BestExercise()
+                    {
+                        Combination = Entities.ExerciseList.ExerciseListUnique().First(t => t.Id == item.Id).Output,
+                        ExerciseType = item.ExerciseType,
+                        Name = item.Name,
+                        BestScore = templateDictionary[item.ExerciseType].CreateChartedScore(item),
+                        Date = item.DateToSave,
+                        Id = item.Id,
+                        Count = 1
+                    });
+            }
+
+            Chart.Title = string.Format("{0} - {1}", selectedExercise.Name, selectedExercise.Output);
         }
 
 

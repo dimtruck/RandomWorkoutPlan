@@ -33,5 +33,11 @@ namespace WorkoutPicker.Strategy
         {
             return new Paragraph(new Run(""));
         }
+
+
+        public double CreateChartedScore(Entities.ExerciseToSave exercise)
+        {
+            return 0;
+        }
     }
 }

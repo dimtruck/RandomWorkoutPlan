@@ -46,5 +46,11 @@ namespace WorkoutPicker.Strategy
         {
             return new Paragraph(new Run(exercise.BestScore.Weight + " for " + exercise.BestScore.Reps));
         }
+
+
+        public double CreateChartedScore(Entities.ExerciseToSave exercise)
+        {
+            return exercise.Reps * exercise.Weight;
+        }
     }
 }

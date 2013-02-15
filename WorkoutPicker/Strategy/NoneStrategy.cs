@@ -31,5 +31,11 @@ namespace WorkoutPicker.Strategy
         {
             throw new NotImplementedException();
         }
+
+
+        public double CreateChartedScore(Entities.ExerciseToSave exercise)
+        {
+            return 0;
+        }
     }
 }
