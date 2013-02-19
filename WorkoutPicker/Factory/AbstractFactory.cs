@@ -16,7 +16,6 @@ namespace WorkoutPicker.Factory
 
         public void BuildStackPanel(StackPanel panel, IList<IExercise> exerciseList, int exerciseCount)
         {
-            IList<BestExercise> bestExerciseList = Entities.ExerciseList.CompileBestExerciseList();
             int ticks = (int)(DateTime.Now.Ticks % 32676);
             Random r = new Random(ticks);
             for (int i = 0; i < exerciseCount; i++)
@@ -32,14 +31,10 @@ namespace WorkoutPicker.Factory
                 }
                 StackPanel newPanel = new StackPanel() { Margin = new System.Windows.Thickness(5), Name = pickedExercise.Name.Replace(' ', '_') };
                 newPanel.Orientation = Orientation.Horizontal;
-                TextBlock exerciseName = new TextBlock() { Text = pickedExercise.Name, Width = 100, Name = "Id_" + pickedExercise.Id.ToString(), FontSize = 12 };
+                TextBlock exerciseName = new TextBlock() { Text = pickedExercise.Name, Width = 100, Name = "Id_" + pickedExercise.Id.ToString(), FontSize = 12};
                 TextBlock exerciseOutput = new TextBlock() { Text = pickedExercise.Output, Width = 220, FontSize = 12 };
-                TextBlock exerciseType = new TextBlock() { Text = pickedExercise.ExerciseType.ToString().Replace('_', ' '), Width = 200, FontSize = 12 };
-                String bestExerciseString = "Not yet completed/doesn't apply";
-                BestExercise bestExercise = bestExerciseList.FirstOrDefault(t => t.Id == pickedExercise.Id);
-                if (bestExercise != null)
-                    bestExerciseString = bestExercise.BestScore + " completed on " + bestExercise.Date.ToString();
-                TextBlock bestExerciseOutput = new TextBlock() { Text = bestExerciseString, TextWrapping= System.Windows.TextWrapping.Wrap, Width= 200, FontSize = 12 };
+                TextBlock exerciseType = new TextBlock() { Text = pickedExercise.ExerciseTypeString, Width = 200, FontSize = 12 };
+                TextBlock bestExerciseOutput = new TextBlock() { Text = pickedExercise.Result, TextWrapping= System.Windows.TextWrapping.Wrap, Margin= new System.Windows.Thickness(10,0,0,0), Width= 200, FontSize = 12 };
 
                 newPanel.Children.Add(exerciseName);
                 newPanel.Children.Add(exerciseOutput);

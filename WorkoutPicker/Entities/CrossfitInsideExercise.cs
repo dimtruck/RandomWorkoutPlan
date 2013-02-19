@@ -62,5 +62,34 @@ namespace WorkoutPicker.Entities
         }
 
         public ExerciseType ExerciseType { get; set; }
+
+        public string ExerciseTypeString
+        {
+            get { return ExerciseType.ToString().Replace('_', ' '); }
+        }
+
+        public string Result
+        {
+            get
+            {
+                BestExercise bestExercise = Entities.ExerciseList.CompileBestExerciseList().FirstOrDefault(t => t.Id == Id);
+                if (bestExercise != null)
+                    return bestExercise.BestScore + " completed on " + bestExercise.Date.ToString();
+                else
+                    return "Not yet completed/doesn't apply";
+            }
+        }
+
+        public string Description
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }

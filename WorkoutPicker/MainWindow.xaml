@@ -69,6 +69,16 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
+        <Style x:Key="myStyle" TargetType="Button">
+            <Setter Property="Background" Value="Orange" />
+            <Setter Property="FontStyle" Value="Italic" />
+            <Setter Property="Padding" Value="8,4" />
+            <Setter Property="Margin" Value="4" />
+        </Style>
+        <Style x:Key="panelStyle" TargetType="StackPanel">
+            <Setter Property="Background" Value="Beige"/>
+        </Style>
     </Window.Resources>
     <Grid>
         <TabControl Grid.Row="0" Grid.Column="1" Margin="5" TabStripPlacement="Top" FontSize="16">
@@ -91,15 +101,25 @@
                                 <ListBox Name="EquipmentList" Margin="8" FontSize="10" Width="214" SelectionMode="Multiple" >
                                 </ListBox>
                             </StackPanel>
-                            <Button Name="GenerateWorkout" Content="Generate Workout" Padding="15" Click="GenerateWorkout_Click_1"></Button>
+                            <Button Style="{StaticResource myStyle}" Name="GenerateWorkout" Content="Generate Workout" Padding="15" Click="GenerateWorkout_Click_1"></Button>
                         </StackPanel>
                         <StackPanel Name="ExerciseListPanel" Orientation="Vertical" Margin="15" Visibility="Visible">
                             <TextBlock HorizontalAlignment="Center" FontFamily="Verdana" FontSize="12" Padding="15" Name="Exercise">Exercises Here:</TextBlock>
-                            <StackPanel Name="ExerciseList" Orientation="Vertical">
-                            </StackPanel>
+                                <Border 
+                                  BorderBrush="Black" 
+                                  BorderThickness="1" 
+                                  CornerRadius="12, 12, 12, 12" >
+                                    <Border.Background>
+                                        <RadialGradientBrush>
+                                        <GradientStop Color="#FF559EB6" Offset="0" />
+                                            <GradientStop Color="LightBlue" Offset="1" />
+                                        </RadialGradientBrush>
+                                    </Border.Background>
+                                    <StackPanel Name="ExerciseList" Orientation="Vertical"/>
+                                </Border>
                         </StackPanel>
                         <StackPanel Name="SavePanel" Orientation="Horizontal" Margin="15" HorizontalAlignment="Center" DockPanel.Dock="Bottom">
-                            <Button Name="Save" Content="Save" Padding="15" Click="Save_Click_1"></Button>
+                            <Button Style="{StaticResource myStyle}" Name="Save" Content="Save" Padding="15" Click="Save_Click_1"></Button>
                         </StackPanel>
                     </StackPanel>
                 </Border>
